@@ -15,7 +15,7 @@ Read-only by design: no management, no writes, no realtime push (clients poll). 
 ## Install
 
 ```bash
-go get github.com/appswitch/appswitch-go
+go get github.com/7c/appswitch-go
 ```
 
 ## Usage
@@ -27,7 +27,7 @@ import (
     "os"
     "time"
 
-    appswitch "github.com/appswitch/appswitch-go"
+    appswitch "github.com/7c/appswitch-go"
 )
 
 client, err := appswitch.New(appswitch.Config{
