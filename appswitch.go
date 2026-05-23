@@ -248,6 +248,17 @@ func (c *AppSwitch) Enum(path string, fallback ...string) (string, error) {
 	return serveTyped(c, path, asEnum, fallback)
 }
 
+// Semver returns the canonical semver string for a semver-typed key.
+func (c *AppSwitch) Semver(path string, fallback ...string) (string, error) {
+	return serveTyped(c, path, asSemver, fallback)
+}
+
+// SemverObject returns a parsed *Semver with Compare/Lt/Gt helpers.
+// Fallbacks are used only on availability failures (not type mismatches).
+func (c *AppSwitch) SemverObject(path string, fallback ...*Semver) (*Semver, error) {
+	return serveTyped(c, path, asSemverObject, fallback)
+}
+
 // JSON decodes a json-typed key into out (e.g. a struct pointer).
 func (c *AppSwitch) JSON(path string, out any) error {
 	key, err := c.serve(path)

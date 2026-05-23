@@ -27,6 +27,7 @@ const (
 	TypeBoolean     DataType = "boolean"
 	TypeDatetime    DataType = "datetime"
 	TypeInterval    DataType = "interval"
+	TypeSemver      DataType = "semver"
 	TypeArrayString DataType = "array<string>"
 	TypeArrayNumber DataType = "array<number>"
 	TypeEnumString  DataType = "enum<string>"

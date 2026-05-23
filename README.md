@@ -5,7 +5,7 @@ Official Go client SDK for **appswitch** — typed, cached, read-only config acc
 - **Read once, serve forever** — after `Start`, reads are answered from an in-memory snapshot.
 - **Caching on by default** — in-memory always; SDK-owned disk cache, unlimited TTL.
 - **Resilient** — keeps serving the last good snapshot when a refresh fails; per-call fallback.
-- **Typed accessors** — `Number`, `Bool`, `URL`, `ArrayString`, `Enum`, `JSON(&out)`, … each `(T, error)`.
+- **Typed accessors** — `Number`, `Bool`, `URL`, `Semver`, `ArrayString`, `Enum`, `JSON(&out)`, … each `(T, error)`.
 - **Change hooks** — whole-config, section/glob, and per-key, fired on the polling boundary.
 - **Best-effort telemetry** — batched read counters flushed to `/v1/_stats`.
 
@@ -51,6 +51,10 @@ defer client.Stop()
 
 port, _ := client.Number("main.lockport")          // 8443
 theme, _ := client.Enum("features.checkout.theme")  // "dark"
+minVer, _ := client.Semver("mobile.minSupportedVersion") // "3.4.0"
+if v, err := client.SemverObject("mobile.minSupportedVersion"); err == nil && v.Lt(appswitch.MustParseSemver("4.0.0")) {
+    // force upgrade
+}
 
 var shipping struct {
     Flat    float64  `json:"flat"`
@@ -74,7 +78,8 @@ client.Section("billing").OnChange(func(e appswitch.Event) {
 | Construct | `appswitch.New(cfg)` |
 | Lifecycle | `Start(ctx)`, `Stop()`, `<-Ready()` |
 | Read | `Get(path, fallback...)`, `Raw(path, fallback...)` |
-| Typed read | `Number` · `String` · `Bool` · `URL` · `Datetime` · `Interval` · `ArrayString` · `ArrayNumber` · `Enum` · `JSON(path, &out)` |
+| Typed read | `Number` · `String` · `Bool` · `URL` · `Datetime` · `Interval` · `Semver` · `SemverObject` · `ArrayString` · `ArrayNumber` · `Enum` · `JSON(path, &out)` |
+| Semver helpers | `ParseSemver`, `CompareSemver`, `IsSemver` — package-level; `(*Semver).Compare`, `.Lt`/`.Gt`, `.Bump` |
 | Snapshot | `Snapshot()`, `LastFetch()` |
 | Refresh | `Refresh(ctx)` |
 | Handles | `Key(path)` → `*AppSwitchKey`, `Section(prefix)` → `*AppSwitchSection` |

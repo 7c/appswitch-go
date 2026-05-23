@@ -135,6 +135,27 @@ func asEnum(key ResolvedKey) (string, error) {
 	return v, nil
 }
 
+// asSemver returns the canonical semver string (already validated server-side).
+func asSemver(key ResolvedKey) (string, error) {
+	if err := expectType(key, TypeSemver, "semver"); err != nil {
+		return "", err
+	}
+	v, ok := key.Value.(string)
+	if !ok || !IsSemver(v) {
+		return "", mismatch(key, "semver")
+	}
+	return v, nil
+}
+
+// asSemverObject returns a parsed *Semver with comparison helpers.
+func asSemverObject(key ResolvedKey) (*Semver, error) {
+	s, err := asSemver(key)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSemver(s)
+}
+
 // asJSON decodes a json-typed key's value into out (CLIENT.md §7).
 func asJSON(key ResolvedKey, out any) error {
 	if err := expectType(key, TypeJSON, "json"); err != nil {

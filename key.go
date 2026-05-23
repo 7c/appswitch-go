@@ -37,6 +37,12 @@ func (k *AppSwitchKey) ArrayNumber(fallback ...[]float64) ([]float64, error) {
 func (k *AppSwitchKey) Enum(fallback ...string) (string, error) {
 	return k.c.Enum(k.Path, fallback...)
 }
+func (k *AppSwitchKey) Semver(fallback ...string) (string, error) {
+	return k.c.Semver(k.Path, fallback...)
+}
+func (k *AppSwitchKey) SemverObject(fallback ...*Semver) (*Semver, error) {
+	return k.c.SemverObject(k.Path, fallback...)
+}
 func (k *AppSwitchKey) JSON(out any) error { return k.c.JSON(k.Path, out) }
 
 // Exists reports whether the key is in the current snapshot.
